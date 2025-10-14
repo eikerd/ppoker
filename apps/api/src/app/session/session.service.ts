@@ -19,7 +19,7 @@ export class SessionService {
     };
 
     const session: Session = {
-      id: randomUUID(),
+      id: this.generateSessionId(),
       dealerId,
       players: [dealer],
       rounds: [],
@@ -29,6 +29,15 @@ export class SessionService {
     };
 
     return await this.repository.create(session);
+  }
+
+  private generateSessionId(): string {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let id = '';
+    for (let i = 0; i < 4; i++) {
+      id += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return id;
   }
 
   async getSession(id: string): Promise<Session | null> {
