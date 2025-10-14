@@ -1,0 +1,46 @@
+<div class="lobby-container">
+  <h1 class="pixel-text">Planning Poker</h1>
+
+  <div class="lobby-card">
+    <h2>Create New Session</h2>
+    <form (ngSubmit)="createSession()">
+      <input
+        type="text"
+        [(ngModel)]="playerName"
+        name="playerName"
+        placeholder="Your name"
+        class="pixel-input"
+      />
+      <button type="submit" class="pixel-button pixel-button--primary">
+        Create Session
+      </button>
+    </form>
+  </div>
+
+  <div class="lobby-card">
+    <h2>Join Session</h2>
+    <form (ngSubmit)="joinSession()">
+      <input
+        type="text"
+        [(ngModel)]="sessionId"
+        name="sessionId"
+        placeholder="Session ID"
+        class="pixel-input"
+      />
+      <button type="submit" class="pixel-button pixel-button--secondary">
+        Join Session
+      </button>
+    </form>
+  </div>
+
+  <div class="session-history" *ngIf="history.length > 0">
+    <h3>Recent Sessions</h3>
+    <div
+      *ngFor="let session of history"
+      class="history-item"
+      (click)="rejoinSession(session.id)"
+    >
+      {{ session.name }} - {{ session.role }}
+    </div>
+  </div>
+</div>

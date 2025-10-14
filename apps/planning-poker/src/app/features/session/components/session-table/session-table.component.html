@@ -1,0 +1,45 @@
+<div class="poker-table" *ngIf="session">
+  <div class="table-header">
+    <h2>Session: {{ session.id }}</h2>
+    <div class="player-count">{{ session.players.length }} players</div>
+  </div>
+
+  <div class="player-zone">
+    <app-player-card
+      *ngFor="let player of session.players"
+      [player]="player"
+      [hasVoted]="hasPlayerVoted(player.id)"
+      [isDealer]="player.isDealer"
+    ></app-player-card>
+  </div>
+
+  <div class="card-area">
+    <app-voting-cards
+      [disabled]="!isVotingActive"
+      (cardSelected)="placeVote($event)"
+    ></app-voting-cards>
+  </div>
+
+  <div class="dealer-controls" *ngIf="isDealer">
+    <button
+      (click)="startRound()"
+      [disabled]="isVotingActive"
+      class="pixel-button pixel-button--primary"
+    >
+      Start Round
+    </button>
+    <button
+      (click)="revealVotes()"
+      [disabled]="!canReveal"
+      class="pixel-button pixel-button--success"
+    >
+      Reveal Votes
+    </button>
+  </div>
+
+  <app-results-table
+    *ngIf="showResults && session.currentRound"
+    [votes]="session.currentRound.votes"
+    [statistics]="session.currentRound.statistics || null"
+  ></app-results-table>
+</div>

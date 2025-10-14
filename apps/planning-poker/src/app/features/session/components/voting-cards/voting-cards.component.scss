@@ -1,0 +1,50 @@
+.voting-cards {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+  padding: var(--spacing-lg);
+  flex-wrap: wrap;
+}
+
+.card {
+  width: var(--card-width);
+  height: var(--card-height);
+  background: var(--color-card-white);
+  border: 3px solid var(--color-text-dark);
+  border-radius: var(--card-radius);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  position: relative;
+
+  &:hover:not(.card--disabled) {
+    transform: translateY(-10px) rotate(2deg);
+    box-shadow: 0 8px 16px var(--color-card-shadow);
+  }
+
+  &--selected {
+    border-color: var(--color-chip-gold);
+    background: lightyellow;
+    transform: translateY(-15px);
+  }
+
+  &--disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &__value {
+    font-family: var(--font-pixel);
+    font-size: 48px;
+    color: var(--color-text-dark);
+  }
+
+  &__suit {
+    font-size: 24px;
+    position: absolute;
+    bottom: var(--spacing-sm);
+  }
+}

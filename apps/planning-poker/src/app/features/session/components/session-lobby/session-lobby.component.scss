@@ -1,0 +1,52 @@
+.lobby-container {
+  max-width: 600px;
+  margin: var(--spacing-xl) auto;
+  padding: var(--spacing-lg);
+}
+
+.lobby-card {
+  background: rgba(255, 255, 255, 0.1);
+  border: 3px solid var(--color-felt-border);
+  border-radius: var(--card-radius);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  h2 {
+    margin-bottom: var(--spacing-md);
+    color: var(--color-chip-gold);
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+}
+
+.session-history {
+  margin-top: var(--spacing-xl);
+
+  h3 {
+    margin-bottom: var(--spacing-md);
+    color: var(--color-text-light);
+  }
+}
+
+.history-item {
+  padding: var(--spacing-md);
+  background: rgba(0, 0, 0, 0.3);
+  border: 2px solid var(--color-felt-border);
+  border-radius: var(--card-radius);
+  margin-bottom: var(--spacing-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+
+  &:hover {
+    background: rgba(255, 215, 0, 0.2);
+    border-color: var(--color-chip-gold);
+  }
+}

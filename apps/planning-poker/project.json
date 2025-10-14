@@ -1,0 +1,63 @@
+{
+  "name": "planning-poker",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/planning-poker/src",
+  "prefix": "app",
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:application",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/planning-poker",
+        "index": "apps/planning-poker/src/index.html",
+        "browser": "apps/planning-poker/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/planning-poker/tsconfig.app.json",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/planning-poker/src/assets",
+            "output": "/assets"
+          }
+        ],
+        "styles": ["apps/planning-poker/src/styles.scss"],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "planning-poker:build:production"
+        },
+        "development": {
+          "buildTarget": "planning-poker:build:development"
+        }
+      },
+      "defaultConfiguration": "development",
+      "options": {
+        "port": 4200
+      }
+    }
+  },
+  "tags": []
+}
