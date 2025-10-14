@@ -48,10 +48,15 @@ export class SessionGateway implements OnGatewayConnection, OnGatewayDisconnect 
       // Join socket room
       client.join(data.sessionId);
 
-      // Broadcast to all clients in session
+      // Broadcast to all clients in session (including new player)
       this.server.to(data.sessionId).emit('player:joined', {
         player: data.player,
         playerCount: session.players.length,
+      });
+
+      // Also broadcast the updated session state to everyone
+      this.server.to(data.sessionId).emit('session:updated', {
+        session,
       });
 
       return { success: true, session };
@@ -69,11 +74,16 @@ export class SessionGateway implements OnGatewayConnection, OnGatewayDisconnect 
     @ConnectedSocket() client: Socket,
   ) {
     try {
-      await this.sessionService.placeVote(data.sessionId, data.playerId, data.value);
+      const session = await this.sessionService.placeVote(data.sessionId, data.playerId, data.value);
 
       // Notify all clients that player voted (don't reveal value yet!)
       this.server.to(data.sessionId).emit('vote:placed', {
         playerId: data.playerId,
+      });
+
+      // Broadcast updated session state (with hidden vote values)
+      this.server.to(data.sessionId).emit('session:updated', {
+        session,
       });
 
       return { success: true };
@@ -125,6 +135,12 @@ export class SessionGateway implements OnGatewayConnection, OnGatewayDisconnect 
       // Broadcast to all clients
       this.server.to(data.sessionId).emit('round:started', { round });
 
+      // Also broadcast updated session state
+      const session = await this.sessionService.getSession(data.sessionId);
+      if (session) {
+        this.server.to(data.sessionId).emit('session:updated', { session });
+      }
+
       return { success: true, round };
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : 'Unknown error';
@@ -147,6 +163,12 @@ export class SessionGateway implements OnGatewayConnection, OnGatewayDisconnect 
         votes: result.round.votes,
         stats: result.stats,
       });
+
+      // Also broadcast updated session state
+      const session = await this.sessionService.getSession(data.sessionId);
+      if (session) {
+        this.server.to(data.sessionId).emit('session:updated', { session });
+      }
 
       return { success: true, results: result };
     } catch (error: unknown) {

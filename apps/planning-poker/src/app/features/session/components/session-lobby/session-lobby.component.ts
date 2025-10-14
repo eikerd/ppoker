@@ -25,9 +25,17 @@ export class SessionLobbyComponent {
 
   ngOnInit() {
     this.history = this.storage.getHistory();
-    const profile = this.storage.getProfile();
-    if (profile) {
-      this.playerName = profile.name;
+
+    // Load player name from localStorage first
+    const savedName = localStorage.getItem('playerName');
+    if (savedName) {
+      this.playerName = savedName;
+    } else {
+      // Fallback to profile if no saved name
+      const profile = this.storage.getProfile();
+      if (profile) {
+        this.playerName = profile.name;
+      }
     }
   }
 
@@ -35,6 +43,9 @@ export class SessionLobbyComponent {
     if (!this.playerName.trim()) return;
 
     this.soundService.play('button');
+
+    // Save player name immediately
+    this.savePlayerName();
 
     this.pokerService.createSession(this.playerName, '🎩').subscribe({
       next: (response) => {
@@ -64,8 +75,20 @@ export class SessionLobbyComponent {
 
     this.soundService.play('button');
 
+    // Save player name immediately
+    this.savePlayerName();
+
+    // Add to history
+    this.storage.addToHistory(this.sessionId, `Session ${this.sessionId}`, 'player');
+
     // Navigate to session
     this.router.navigate(['/session', this.sessionId]);
+  }
+
+  savePlayerName() {
+    if (this.playerName.trim()) {
+      localStorage.setItem('playerName', this.playerName);
+    }
   }
 
   rejoinSession(sessionId: string) {

@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Session, Player } from '@ppoker/shared/data-access';
 import { PlanningPokerService } from '../../../../core/services/planning-poker.service';
 import { StorageService } from '../../../../core/services/storage.service';
@@ -18,6 +18,7 @@ import { ResultsTableComponent } from '../results-table/results-table.component'
 })
 export class SessionTableComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private pokerService = inject(PlanningPokerService);
   private storage = inject(StorageService);
   private soundService = inject(SoundService);
@@ -69,6 +70,7 @@ export class SessionTableComponent implements OnInit, OnDestroy {
         // Connect via WebSocket
         if (this.currentPlayer) {
           this.pokerService.connectToSession(sessionId, this.currentPlayer);
+          this.setupWebSocketListeners(sessionId);
         }
       },
       error: (err) => {
@@ -78,8 +80,71 @@ export class SessionTableComponent implements OnInit, OnDestroy {
     });
   }
 
+  private setupWebSocketListeners(sessionId: string) {
+    // Listen for players joining
+    this.pokerService.session$.subscribe((session) => {
+      if (session) {
+        this.session = session;
+      }
+    });
+
+    // Manually setup socket listeners for real-time updates
+    const wsService = (this.pokerService as any).wsService;
+
+    wsService.on('player:joined', (data: any) => {
+      console.log('Player joined:', data);
+      // Refresh session to get updated player list
+      this.pokerService.getSession(sessionId).subscribe((session) => {
+        this.session = session;
+      });
+    });
+
+    wsService.on('player:left', (data: any) => {
+      console.log('Player left:', data);
+      // Refresh session to get updated player list
+      this.pokerService.getSession(sessionId).subscribe((session) => {
+        this.session = session;
+      });
+    });
+
+    wsService.on('vote:placed', (data: any) => {
+      console.log('Vote placed:', data);
+      // Refresh session to show vote indicator
+      this.pokerService.getSession(sessionId).subscribe((session) => {
+        this.session = session;
+      });
+    });
+
+    wsService.on('round:started', (data: any) => {
+      console.log('Round started:', data);
+      this.isVotingActive = true;
+      this.showResults = false;
+      this.soundService.play('button');
+      // Refresh session
+      this.pokerService.getSession(sessionId).subscribe((session) => {
+        this.session = session;
+      });
+    });
+
+    wsService.on('round:revealed', (data: any) => {
+      console.log('Round revealed:', data);
+      this.isVotingActive = false;
+      this.showResults = true;
+      this.soundService.play('trumpet');
+      // Refresh session
+      this.pokerService.getSession(sessionId).subscribe((session) => {
+        this.session = session;
+      });
+    });
+  }
+
   ngOnDestroy() {
     this.pokerService.disconnect();
+  }
+
+  backToLobby() {
+    this.pokerService.disconnect();
+    this.router.navigate(['/lobby']);
   }
 
   startRound() {

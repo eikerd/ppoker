@@ -2,8 +2,8 @@
   <h1 class="pixel-text">Planning Poker</h1>
 
   <div class="lobby-card">
-    <h2>Create New Session</h2>
-    <form (ngSubmit)="createSession()">
+    <h2>Player Name</h2>
+    <form (ngSubmit)="savePlayerName()">
       <input
         type="text"
         [(ngModel)]="playerName"
@@ -12,7 +12,7 @@
         class="pixel-input"
       />
       <button type="submit" class="pixel-button pixel-button--primary">
-        Create Session
+        Save Player Name
       </button>
     </form>
   </div>
@@ -33,6 +33,13 @@
     </form>
   </div>
 
+  <div class="lobby-card">
+    <h2>Create New Session</h2>
+    <button (click)="createSession()" class="pixel-button pixel-button--primary">
+      Create Session
+    </button>
+  </div>
+
   <div class="session-history" *ngIf="history.length > 0">
     <h3>Recent Sessions</h3>
     <div
@@ -40,7 +47,7 @@
       class="history-item"
       (click)="rejoinSession(session.id)"
     >
-      {{ session.name }} - {{ session.role }}
+      <strong>{{ session.id }}</strong> - {{ session.name }} ({{ session.role }})
     </div>
   </div>
 </div>

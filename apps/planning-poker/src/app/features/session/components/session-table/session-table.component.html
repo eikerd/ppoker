@@ -1,5 +1,6 @@
 <div class="poker-table" *ngIf="session">
   <div class="table-header">
+    <button class="back-button" (click)="backToLobby()">← Back to Lobby</button>
     <h2>Session: {{ session.id }}</h2>
     <div class="player-count">{{ session.players.length }} players</div>
   </div>
@@ -14,6 +15,10 @@
   </div>
 
   <div class="card-area">
+    <div class="status-message" *ngIf="!isVotingActive && !showResults">
+      <p *ngIf="isDealer">Click "Start Round" to begin voting</p>
+      <p *ngIf="!isDealer">Waiting for dealer to start the round...</p>
+    </div>
     <app-voting-cards
       [disabled]="!isVotingActive"
       (cardSelected)="placeVote($event)"

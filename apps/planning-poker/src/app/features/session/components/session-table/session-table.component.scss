@@ -14,6 +14,28 @@
 .table-header {
   text-align: center;
   margin-bottom: var(--spacing-lg);
+  position: relative;
+
+  .back-button {
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: 8px 16px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid var(--color-text-light);
+    color: var(--color-text-light);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.2s;
+
+    &:hover {
+      background: var(--color-chip-gold);
+      color: var(--color-text-dark);
+      border-color: var(--color-chip-gold);
+    }
+  }
 
   h2 {
     color: var(--color-chip-gold);
@@ -35,6 +57,23 @@
 
 .card-area {
   margin: var(--spacing-xl) 0;
+}
+
+.status-message {
+  text-align: center;
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  border: 2px solid var(--color-chip-gold);
+
+  p {
+    color: var(--color-chip-gold);
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  }
 }
 
 .dealer-controls {

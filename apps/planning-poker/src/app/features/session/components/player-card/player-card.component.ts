@@ -11,7 +11,7 @@ import { Player } from '@ppoker/shared/data-access';
       <div class="player-card__avatar">{{ player?.avatar }}</div>
       <div class="player-card__name">{{ player?.name }}</div>
       <div class="player-card__status" [class.player-card__status--ready]="hasVoted">
-        {{ hasVoted ? '✓ Ready' : '🤔 Thinking' }}
+        {{ hasVoted ? '✓ Voted' : '🤔 Thinking' }}
       </div>
       <div *ngIf="player?.isDealer" class="player-card__badge">Dealer</div>
     </div>
