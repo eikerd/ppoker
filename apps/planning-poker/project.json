@@ -26,6 +26,12 @@
       },
       "configurations": {
         "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/planning-poker/src/environments/environment.ts",
+              "with": "apps/planning-poker/src/environments/environment.prod.ts"
+            }
+          ],
           "budgets": [
             {
               "type": "initial",
@@ -34,6 +40,17 @@
             }
           ],
           "outputHashing": "all"
+        },
+        "network": {
+          "fileReplacements": [
+            {
+              "replace": "apps/planning-poker/src/environments/environment.ts",
+              "with": "apps/planning-poker/src/environments/environment.network.ts"
+            }
+          ],
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
         },
         "development": {
           "optimization": false,
@@ -48,6 +65,10 @@
       "configurations": {
         "production": {
           "buildTarget": "planning-poker:build:production"
+        },
+        "network": {
+          "buildTarget": "planning-poker:build:network",
+          "host": "0.0.0.0"
         },
         "development": {
           "buildTarget": "planning-poker:build:development"

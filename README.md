@@ -30,27 +30,45 @@ npm install
 
 ### Run Development Servers
 
-**Option 1: Run both apps together**
+**Option 1: Local development (single machine)**
 ```bash
 # Terminal 1: Backend API
-npx nx serve api
+npm run start:api
 # Runs on http://localhost:3333
 
 # Terminal 2: Frontend
-npx nx serve planning-poker
+npm run start:frontend
 # Runs on http://localhost:4200
 ```
 
-**Option 2: Run manually**
+**Option 2: Network testing (multiple devices on same network)**
 ```bash
-# Backend
-npx nx serve api
+# Terminal 1: Backend API
+npm run start:api
+# Runs on http://localhost:3333
 
-# Frontend (in another terminal)
-npx nx serve planning-poker
+# Terminal 2: Frontend (with network access)
+npm run start:network
+# Runs on http://0.0.0.0:4200
+# Access from other devices: http://192.168.42.5:4200
 ```
 
-Visit http://localhost:4200 to start playing!
+Visit http://localhost:4200 (local) or http://YOUR_IP:4200 (network) to start playing!
+
+### Environment Configuration
+
+The app supports three environments:
+
+1. **Development** (default): `localhost` for single-machine testing
+2. **Network**: Local IP address for multi-device testing
+3. **Production**: Domain-based for deployment
+
+To change the API URL for network testing, update:
+```
+apps/planning-poker/src/environments/environment.network.ts
+```
+
+Replace `192.168.42.5` with your machine's actual IP address.
 
 ## How to Play
 

@@ -5,6 +5,7 @@
   "scripts": {
     "start:api": "nx serve api",
     "start:frontend": "nx serve planning-poker",
+    "start:network": "nx serve planning-poker --configuration=network",
     "build": "nx run-many --target=build --projects=api,planning-poker",
     "build:prod": "nx run-many --target=build --projects=api,planning-poker --configuration=production",
     "test": "nx run-many --target=test --all",

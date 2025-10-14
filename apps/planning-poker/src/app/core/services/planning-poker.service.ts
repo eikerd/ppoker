@@ -3,10 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Session, Player, Round } from '@ppoker/shared/data-access';
 import { WebSocketService } from './websocket.service';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class PlanningPokerService {
-  private readonly API_URL = 'http://localhost:3333/api';
+  private readonly API_URL = environment.apiUrl;
   private http = inject(HttpClient);
   private wsService = inject(WebSocketService);
 
@@ -41,7 +42,7 @@ export class PlanningPokerService {
 
   // WebSocket Operations
   connectToSession(sessionId: string, player: Player): void {
-    this.wsService.connect();
+    this.wsService.connect(environment.wsUrl);
     this.wsService.emit('session:join', { sessionId, player });
     this.setupEventListeners();
   }
