@@ -70,15 +70,17 @@ export class SessionGateway implements OnGatewayConnection, OnGatewayDisconnect 
   // Client → Server: Place vote
   @SubscribeMessage('vote:place')
   async handlePlaceVote(
-    @MessageBody() data: { sessionId: string; playerId: string; value: 1 | 2 | 3 | 5 | 7 },
+    @MessageBody() data: { sessionId: string; playerId: string; value: 1 | 2 | 3 | 5 | 7 | undefined },
     @ConnectedSocket() client: Socket,
   ) {
     try {
       const session = await this.sessionService.placeVote(data.sessionId, data.playerId, data.value);
 
       // Notify all clients that player voted (don't reveal value yet!)
+      // If value is undefined, it's an unvote
       this.server.to(data.sessionId).emit('vote:placed', {
         playerId: data.playerId,
+        isUnvote: data.value === undefined,
       });
 
       // Broadcast updated session state (with hidden vote values)

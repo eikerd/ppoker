@@ -47,7 +47,7 @@ export class PlanningPokerService {
     this.setupEventListeners();
   }
 
-  placeVote(sessionId: string, playerId: string, value: number): void {
+  placeVote(sessionId: string, playerId: string, value: number | undefined): void {
     this.wsService.emit('vote:place', { sessionId, playerId, value });
   }
 

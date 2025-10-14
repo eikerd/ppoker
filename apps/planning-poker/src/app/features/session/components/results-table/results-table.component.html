@@ -12,7 +12,7 @@
     </thead>
     <tbody>
       <tr
-        *ngFor="let vote of votes"
+        *ngFor="let vote of nonDealerVotes"
         [class.outlier]="isOutlier(vote)"
         [class.needs-split]="vote.value === 7"
       >

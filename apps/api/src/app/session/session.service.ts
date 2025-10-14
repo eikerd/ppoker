@@ -105,7 +105,7 @@ export class SessionService {
     return round;
   }
 
-  async placeVote(sessionId: string, playerId: string, value: 1 | 2 | 3 | 5 | 7): Promise<Session> {
+  async placeVote(sessionId: string, playerId: string, value: 1 | 2 | 3 | 5 | 7 | undefined): Promise<Session> {
     const session = await this.repository.findById(sessionId);
     if (!session) throw new Error('Session not found');
     if (!session.currentRound) throw new Error('No active round');
@@ -113,8 +113,9 @@ export class SessionService {
     const vote = session.currentRound.votes.find(v => v.playerId === playerId);
     if (!vote) throw new Error('Player not found in round');
 
+    // If value is undefined, it's an unvote - clear the vote
     vote.value = value;
-    vote.placedAt = new Date();
+    vote.placedAt = value !== undefined ? new Date() : undefined;
 
     return await this.repository.update(sessionId, {
       currentRound: session.currentRound,

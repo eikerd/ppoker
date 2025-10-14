@@ -10,8 +10,9 @@ import { Player } from '@ppoker/shared/data-access';
     <div class="player-card" [class.player-card--dealer]="player?.isDealer">
       <div class="player-card__avatar">{{ player?.avatar }}</div>
       <div class="player-card__name">{{ player?.name }}</div>
-      <div class="player-card__status" [class.player-card__status--ready]="hasVoted">
-        {{ hasVoted ? '✓ Voted' : '🤔 Thinking' }}
+      <div class="player-card__status" [class.player-card__status--voted]="hasVoted">
+        <div class="card-icon" *ngIf="hasVoted">🂠</div>
+        <div class="question-icon" *ngIf="!hasVoted">❓</div>
       </div>
       <div *ngIf="player?.isDealer" class="player-card__badge">Dealer</div>
     </div>
@@ -44,14 +45,27 @@ import { Player } from '@ppoker/shared/data-access';
       }
 
       &__status {
-        font-size: 12px;
-        padding: 4px 8px;
-        border-radius: 4px;
-        background: rgba(255, 255, 255, 0.1);
+        font-size: 32px;
+        padding: 8px;
+        border-radius: 8px;
+        background: rgba(0, 0, 0, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 50px;
+        min-height: 50px;
 
-        &--ready {
-          background: var(--color-chip-blue);
-          color: white;
+        &--voted {
+          background: rgba(0, 100, 0, 0.3);
+          border: 2px solid var(--color-chip-blue);
+        }
+
+        .card-icon {
+          filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+        }
+
+        .question-icon {
+          opacity: 0.6;
         }
       }
 

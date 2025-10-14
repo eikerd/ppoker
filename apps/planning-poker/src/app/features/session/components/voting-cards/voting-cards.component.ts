@@ -21,8 +21,15 @@ export class VotingCardsComponent {
   selectCard(value: number): void {
     if (this.disabled) return;
 
-    this.selectedValue = value;
-    this.soundService.play('card-flip');
-    this.cardSelected.emit(value);
+    // If clicking the same card, unvote (deselect)
+    if (this.selectedValue === value) {
+      this.selectedValue = null;
+      this.soundService.play('card-flip');
+      this.cardSelected.emit(-1); // -1 signals an unvote
+    } else {
+      this.selectedValue = value;
+      this.soundService.play('card-flip');
+      this.cardSelected.emit(value);
+    }
   }
 }

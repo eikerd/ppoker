@@ -33,13 +33,16 @@ export class SessionTableComponent implements OnInit, OnDestroy {
     const sessionId = this.route.snapshot.paramMap.get('id');
     if (!sessionId) return;
 
+    // Get player name from localStorage first, then fall back to profile
+    const savedName = localStorage.getItem('playerName');
+
     // Get player profile
     const profile = this.storage.getProfile();
     if (!profile) {
       // Create a new player profile
       const newProfile = {
         id: crypto.randomUUID(),
-        name: 'Player',
+        name: savedName || 'Player',
         avatar: '👤',
         createdAt: new Date()
       };
@@ -53,6 +56,7 @@ export class SessionTableComponent implements OnInit, OnDestroy {
     } else {
       this.currentPlayer = {
         ...profile,
+        name: savedName || profile.name, // Use localStorage name if available
         isDealer: false,
         isConnected: true,
         joinedAt: new Date()
@@ -81,10 +85,13 @@ export class SessionTableComponent implements OnInit, OnDestroy {
   }
 
   private setupWebSocketListeners(sessionId: string) {
-    // Listen for players joining
+    // Listen for session updates and sync UI state
     this.pokerService.session$.subscribe((session) => {
       if (session) {
         this.session = session;
+        // Update UI state based on session status
+        this.isVotingActive = session.status === 'voting';
+        this.showResults = session.status === 'revealed';
       }
     });
 
@@ -96,6 +103,8 @@ export class SessionTableComponent implements OnInit, OnDestroy {
       // Refresh session to get updated player list
       this.pokerService.getSession(sessionId).subscribe((session) => {
         this.session = session;
+        this.isVotingActive = session.status === 'voting';
+        this.showResults = session.status === 'revealed';
       });
     });
 
@@ -104,6 +113,8 @@ export class SessionTableComponent implements OnInit, OnDestroy {
       // Refresh session to get updated player list
       this.pokerService.getSession(sessionId).subscribe((session) => {
         this.session = session;
+        this.isVotingActive = session.status === 'voting';
+        this.showResults = session.status === 'revealed';
       });
     });
 
@@ -112,28 +123,30 @@ export class SessionTableComponent implements OnInit, OnDestroy {
       // Refresh session to show vote indicator
       this.pokerService.getSession(sessionId).subscribe((session) => {
         this.session = session;
+        this.isVotingActive = session.status === 'voting';
+        this.showResults = session.status === 'revealed';
       });
     });
 
     wsService.on('round:started', (data: any) => {
       console.log('Round started:', data);
-      this.isVotingActive = true;
-      this.showResults = false;
       this.soundService.play('button');
-      // Refresh session
+      // Refresh session and sync state
       this.pokerService.getSession(sessionId).subscribe((session) => {
         this.session = session;
+        this.isVotingActive = session.status === 'voting';
+        this.showResults = session.status === 'revealed';
       });
     });
 
     wsService.on('round:revealed', (data: any) => {
       console.log('Round revealed:', data);
-      this.isVotingActive = false;
-      this.showResults = true;
       this.soundService.play('trumpet');
-      // Refresh session
+      // Refresh session and sync state
       this.pokerService.getSession(sessionId).subscribe((session) => {
         this.session = session;
+        this.isVotingActive = session.status === 'voting';
+        this.showResults = session.status === 'revealed';
       });
     });
   }
@@ -160,7 +173,13 @@ export class SessionTableComponent implements OnInit, OnDestroy {
     if (!this.session || !this.currentPlayer) return;
 
     this.soundService.play('chip-clink');
-    this.pokerService.placeVote(this.session.id, this.currentPlayer.id, value);
+
+    // If value is -1, it's an unvote - send undefined to clear the vote
+    if (value === -1) {
+      this.pokerService.placeVote(this.session.id, this.currentPlayer.id, undefined);
+    } else {
+      this.pokerService.placeVote(this.session.id, this.currentPlayer.id, value);
+    }
   }
 
   revealVotes() {

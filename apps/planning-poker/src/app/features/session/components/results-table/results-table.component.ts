@@ -12,6 +12,11 @@ import { Vote, VoteStatistics } from '@ppoker/shared/data-access';
 export class ResultsTableComponent {
   @Input() votes: Vote[] = [];
   @Input() statistics: VoteStatistics | null = null;
+  @Input() dealerId: string = '';
+
+  get nonDealerVotes(): Vote[] {
+    return this.votes.filter(vote => vote.playerId !== this.dealerId);
+  }
 
   isOutlier(vote: Vote): boolean {
     return this.statistics?.outliers.includes(vote.playerId) || false;

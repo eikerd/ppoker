@@ -28,7 +28,6 @@
   <div class="dealer-controls" *ngIf="isDealer">
     <button
       (click)="startRound()"
-      [disabled]="isVotingActive"
       class="pixel-button pixel-button--primary"
     >
       Start Round
@@ -43,8 +42,9 @@
   </div>
 
   <app-results-table
-    *ngIf="showResults && session.currentRound"
+    *ngIf="!isVotingActive && session.currentRound && session.currentRound.statistics"
     [votes]="session.currentRound.votes"
     [statistics]="session.currentRound.statistics || null"
+    [dealerId]="session.dealerId"
   ></app-results-table>
 </div>
