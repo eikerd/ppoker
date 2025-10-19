@@ -35,7 +35,8 @@ import { Player } from '@ppoker/shared/data-access';
       }
 
       &__avatar {
-        font-size: 48px;
+        /* doubled avatar size to be twice as big */
+        font-size: 96px;
       }
 
       &__name {

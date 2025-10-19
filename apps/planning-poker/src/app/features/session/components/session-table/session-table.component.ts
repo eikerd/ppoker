@@ -130,7 +130,7 @@ export class SessionTableComponent implements OnInit, OnDestroy {
 
     wsService.on('round:started', (data: any) => {
       console.log('Round started:', data);
-      this.soundService.play('button');
+      this.soundService.play('click');
       // Refresh session and sync state
       this.pokerService.getSession(sessionId).subscribe((session) => {
         this.session = session;
@@ -141,7 +141,7 @@ export class SessionTableComponent implements OnInit, OnDestroy {
 
     wsService.on('round:revealed', (data: any) => {
       console.log('Round revealed:', data);
-      this.soundService.play('trumpet');
+      this.soundService.play('yay');
       // Refresh session and sync state
       this.pokerService.getSession(sessionId).subscribe((session) => {
         this.session = session;
@@ -163,7 +163,7 @@ export class SessionTableComponent implements OnInit, OnDestroy {
   startRound() {
     if (!this.session) return;
 
-    this.soundService.play('button');
+    this.soundService.play('click');
     this.pokerService.emitStartRound(this.session.id);
     this.isVotingActive = true;
     this.showResults = false;
@@ -172,7 +172,7 @@ export class SessionTableComponent implements OnInit, OnDestroy {
   placeVote(value: number) {
     if (!this.session || !this.currentPlayer) return;
 
-    this.soundService.play('chip-clink');
+    this.soundService.play('click');
 
     // If value is -1, it's an unvote - send undefined to clear the vote
     if (value === -1) {
@@ -185,7 +185,7 @@ export class SessionTableComponent implements OnInit, OnDestroy {
   revealVotes() {
     if (!this.session) return;
 
-    this.soundService.play('trumpet');
+    this.soundService.play('yay');
     this.pokerService.emitRevealRound(this.session.id);
     this.isVotingActive = false;
     this.showResults = true;

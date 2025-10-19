@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { StorageService } from './storage.service';
 
-type SoundId = 'card-flip' | 'chip-clink' | 'trumpet' | 'button';
+// Use only the actual sound ids that correspond to files in assets/sounds.
+type SoundId = 'click' | 'deal' | 'flip' | 'flop' | 'toss' | 'yay';
 
 @Injectable({ providedIn: 'root' })
 export class SoundService {
@@ -25,17 +26,27 @@ export class SoundService {
   }
 
   private preloadSounds(): void {
+    // Map sound ids directly to the files under assets/sounds
     const soundFiles: Record<SoundId, string> = {
-      'card-flip': '/assets/sounds/card-flip.mp3',
-      'chip-clink': '/assets/sounds/chip.mp3',
-      'trumpet': '/assets/sounds/trumpet.mp3',
-      'button': '/assets/sounds/button.mp3'
+      click: '/assets/sounds/click.wav',
+      deal: '/assets/sounds/deal.ogg',
+      flip: '/assets/sounds/flip.ogg',
+      flop: '/assets/sounds/flop.ogg',
+      toss: '/assets/sounds/toss.ogg',
+      yay: '/assets/sounds/yay.mp3'
     };
 
     Object.entries(soundFiles).forEach(([id, url]) => {
-      const audio = new Audio(url);
-      audio.preload = 'auto';
-      this.sounds[id as SoundId] = audio;
+      try {
+        const audio = new Audio(url);
+        audio.preload = 'auto';
+        this.sounds[id as SoundId] = audio;
+      } catch (err) {
+        // In case Audio isn't available (server-side rendering), skip gracefully
+        // and leave the entry undefined so play() will simply no-op.
+        // eslint-disable-next-line no-console
+        console.warn(`Failed to create audio for ${id} -> ${url}:`, err);
+      }
     });
   }
 

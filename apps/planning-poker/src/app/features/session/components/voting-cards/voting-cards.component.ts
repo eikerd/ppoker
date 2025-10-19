@@ -24,11 +24,11 @@ export class VotingCardsComponent {
     // If clicking the same card, unvote (deselect)
     if (this.selectedValue === value) {
       this.selectedValue = null;
-      this.soundService.play('card-flip');
+      this.soundService.play('flip');
       this.cardSelected.emit(-1); // -1 signals an unvote
     } else {
       this.selectedValue = value;
-      this.soundService.play('card-flip');
+      this.soundService.play('flip');
       this.cardSelected.emit(value);
     }
   }

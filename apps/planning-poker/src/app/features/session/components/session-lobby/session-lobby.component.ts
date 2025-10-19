@@ -42,7 +42,7 @@ export class SessionLobbyComponent {
   createSession() {
     if (!this.playerName.trim()) return;
 
-    this.soundService.play('button');
+    this.soundService.play('click');
 
     // Save player name immediately
     this.savePlayerName();
@@ -73,7 +73,7 @@ export class SessionLobbyComponent {
   joinSession() {
     if (!this.sessionId.trim() || !this.playerName.trim()) return;
 
-    this.soundService.play('button');
+    this.soundService.play('click');
 
     // Save player name immediately
     this.savePlayerName();

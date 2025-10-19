@@ -50,7 +50,8 @@
       color: var(--color-text-light);
 
       &.avatar {
-        font-size: 24px;
+        /* doubled avatar size to be twice as big */
+        font-size: 48px;
         text-align: center;
       }
 
