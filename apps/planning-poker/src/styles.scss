@@ -58,7 +58,7 @@
 }
 
 body {
-  font-family: var(--font-base);
+  font-family: var(--font-base), system-ui, sans-serif;
   background: linear-gradient(
     135deg,
     var(--color-felt-green-dark) 0%,
@@ -70,13 +70,13 @@ body {
 
 // Utility classes
 .pixel-text {
-  font-family: var(--font-pixel);
+  font-family: var(--font-pixel), monospace;
   text-transform: uppercase;
   letter-spacing: 2px;
 }
 
 .display-text {
-  font-family: var(--font-display);
+  font-family: var(--font-display), monospace;
   font-size: 24px;
 }
 
@@ -87,7 +87,7 @@ body {
   border: 2px solid var(--color-card-white);
   background: rgba(0, 0, 0, 0.3);
   color: var(--color-text-light);
-  font-family: var(--font-display);
+  font-family: var(--font-display), monospace;
   font-size: 16px;
   border-radius: 4px;
 
@@ -108,7 +108,7 @@ body {
   border: 3px solid var(--color-text-light);
   background: var(--color-chip-black);
   color: var(--color-text-light);
-  font-family: var(--font-pixel);
+  font-family: var(--font-pixel), monospace;
   font-size: 12px;
   cursor: pointer;
   transition: all var(--transition-fast);
@@ -123,23 +123,24 @@ body {
     transform: translateY(0);
   }
 
-  &--primary {
-    background: var(--color-chip-red);
-    border-color: #a01828;
-  }
-
-  &--secondary {
-    background: var(--color-chip-blue);
-    border-color: #003a8c;
-  }
-
-  &--success {
-    background: var(--color-success);
-    border-color: #388e3c;
-  }
-
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
   }
+}
+
+/* Flat modifier classes for buttons (avoid nesting &--primary) */
+.pixel-button--primary {
+  background: var(--color-chip-red);
+  border-color: #a01828;
+}
+
+.pixel-button--secondary {
+  background: var(--color-chip-blue);
+  border-color: #003a8c;
+}
+
+.pixel-button--success {
+  background: var(--color-success);
+  border-color: #388e3c;
 }

@@ -14,7 +14,7 @@
 .results-table {
   width: 100%;
   border-collapse: collapse;
-  font-family: var(--font-display);
+  font-family: var(--font-display), monospace;
 
   thead {
     background: rgba(0, 0, 0, 0.3);
@@ -57,7 +57,7 @@
 
       &.vote-value {
         font-size: 32px;
-        font-family: var(--font-pixel);
+        font-family: var(--font-pixel), monospace;
         text-align: center;
         color: var(--color-chip-gold);
       }
@@ -77,26 +77,27 @@
   padding: var(--spacing-md);
   border-radius: var(--card-radius);
   text-align: center;
+}
 
-  &__label {
-    display: block;
-    font-size: 12px;
-    color: var(--color-text-muted);
-    margin-bottom: var(--spacing-xs);
-  }
+/* Flat element classes to avoid nesting after & */
+.stat__label {
+  display: block;
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-xs);
+}
 
-  &__value {
-    display: block;
-    font-family: var(--font-pixel);
-    font-size: 24px;
-    color: var(--color-chip-gold);
-  }
+.stat__value {
+  display: block;
+  font-family: var(--font-pixel), monospace;
+  font-size: 24px;
+  color: var(--color-chip-gold);
+}
 
-  &.consensus-yes {
-    border: 2px solid var(--color-success);
+.stat.consensus-yes {
+  border: 2px solid var(--color-success);
+}
 
-    .stat__value {
-      color: var(--color-success);
-    }
-  }
+.stat.consensus-yes .stat__value {
+  color: var(--color-success);
 }
