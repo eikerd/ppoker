@@ -19,6 +19,11 @@
             "glob": "**/*",
             "input": "apps/planning-poker/src/assets",
             "output": "/assets"
+          },
+          {
+            "glob": "favicon.ico",
+            "input": "apps/planning-poker/src/assets",
+            "output": "."
           }
         ],
         "styles": ["apps/planning-poker/src/styles.scss"],

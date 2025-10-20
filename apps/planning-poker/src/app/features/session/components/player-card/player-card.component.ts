@@ -8,7 +8,7 @@ import { Player } from '@ppoker/shared/data-access';
   imports: [CommonModule],
   template: `
     <div class="player-card" [class.player-card--dealer]="player?.isDealer">
-      <div class="player-card__avatar">{{ player?.avatar }}</div>
+      <div class="player-card__avatar" style="font-size:24px; line-height:1">{{ player?.avatar }}</div>
       <div class="player-card__name">{{ player?.name }}</div>
       <div class="player-card__status" [class.player-card__status--voted]="hasVoted">
         <div class="card-icon" *ngIf="hasVoted">🂠</div>
@@ -20,7 +20,7 @@ import { Player } from '@ppoker/shared/data-access';
   styles: [`
     .player-card {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       align-items: center;
       gap: var(--spacing-sm);
       padding: var(--spacing-md);
@@ -32,28 +32,41 @@ import { Player } from '@ppoker/shared/data-access';
       &--dealer {
         border-color: var(--color-chip-gold);
         box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+
+        & .player-card__avatar {
+          font-size: 24px;
+          line-height: 1;
+        }
       }
 
       &__avatar {
-        font-size: 48px;
+        /* avatar size reduced to 25% (24px) per design request */
+          width: 64px;
+        font-size: 24px;
+        line-height: 1; /* prevent emoji from being vertically constrained */
       }
 
       &__name {
+         
         font-family: var(--font-display);
+          width: 200px;
         font-size: 16px;
         color: var(--color-text-light);
       }
 
       &__status {
-        font-size: 32px;
+        /* increased status icon size to match doubled avatars */
+        
+        font-size: 64px;
         padding: 8px;
         border-radius: 8px;
         background: rgba(0, 0, 0, 0.3);
         display: flex;
         align-items: center;
         justify-content: center;
-        min-width: 50px;
-        min-height: 50px;
+        min-width: 200px;
+        min-height: 200px;
+        line-height: 1;
 
         &--voted {
           background: rgba(0, 100, 0, 0.3);
@@ -62,10 +75,15 @@ import { Player } from '@ppoker/shared/data-access';
 
         .card-icon {
           filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+          /* Make the card icon twice as big relative to the status font-size */
+          font-size: 2em;
+          line-height: 1;
         }
 
         .question-icon {
           opacity: 0.6;
+          font-size: inherit;
+          line-height: 1;
         }
       }
 
