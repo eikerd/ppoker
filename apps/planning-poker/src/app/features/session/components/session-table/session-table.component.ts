@@ -9,6 +9,31 @@ import { VotingCardsComponent } from '../voting-cards/voting-cards.component';
 import { PlayerCardComponent } from '../player-card/player-card.component';
 import { ResultsTableComponent } from '../results-table/results-table.component';
 
+// Generate a UUID safely across browsers. Prefer crypto.randomUUID(), then crypto.getRandomValues(), then Math.random fallback.
+function getUuid(): string {
+  try {
+    if (typeof crypto !== 'undefined' && typeof (crypto as any).randomUUID === 'function') {
+      return (crypto as any).randomUUID();
+    }
+
+    if (typeof crypto !== 'undefined' && typeof crypto.getRandomValues === 'function') {
+      const bytes = new Uint8Array(16);
+      crypto.getRandomValues(bytes);
+      // Per RFC4122 v4
+      bytes[6] = (bytes[6] & 0x0f) | 0x40;
+      bytes[8] = (bytes[8] & 0x3f) | 0x80;
+      const hex = Array.from(bytes).map((b) => b.toString(16).padStart(2, '0')).join('');
+      return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
+    }
+  } catch (e) {
+    // ignore and fallback
+  }
+
+  // Fallback (not cryptographically secure)
+  const rnd = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+  return `${rnd()}${rnd()}-${rnd()}-${rnd()}-${rnd()}${rnd()}${rnd()}`;
+}
+
 @Component({
   selector: 'app-session-table',
   standalone: true,
@@ -41,7 +66,7 @@ export class SessionTableComponent implements OnInit, OnDestroy {
     if (!profile) {
       // Create a new player profile
       const newProfile = {
-        id: crypto.randomUUID(),
+        id: getUuid(),
         name: savedName || 'Player',
         avatar: '👤',
         createdAt: new Date()

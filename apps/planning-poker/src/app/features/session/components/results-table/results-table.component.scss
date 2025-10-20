@@ -50,8 +50,8 @@
       color: var(--color-text-light);
 
       &.avatar {
-        /* doubled avatar size to be twice as big */
-        font-size: 48px;
+        /* avatar size set to 25% target (24px) to match player card */
+        font-size: 24px;
         text-align: center;
       }
 
