@@ -50,10 +50,10 @@ npm run start:api
 # Terminal 2: Frontend (with network access)
 npm run start:network
 # Runs on http://0.0.0.0:4200
-# Access from other devices: http://192.168.42.5:4200
+# Access from other devices: http://<YOUR_MACHINE_IP>:4200
 ```
 
-Visit http://localhost:4200 (local) or http://YOUR_IP:4200 (network) to start playing!
+Visit `http://localhost:4200` (local) or `http://<YOUR_IP>:4200` (network) to start playing!
 
 ### Environment Configuration
 
@@ -64,11 +64,28 @@ The app supports three environments:
 3. **Production**: Domain-based for deployment
 
 To change the API URL for network testing, update:
+
 ```
 apps/planning-poker/src/environments/environment.network.ts
 ```
 
-Replace `192.168.42.5` with your machine's actual IP address.
+Note: Do not commit a hardcoded personal IP address. The `network` environment now computes the API and WebSocket URLs at runtime from the browser's host (so the frontend will automatically target the same machine the site is served from). If you prefer, you can set the frontend to point to a specific IP by editing the file locally before testing.
+
+If you need to find your machine's IP on macOS or Linux, run (example):
+
+```bash
+# macOS
+ipconfig getifaddr en0
+
+# Linux
+hostname -I | awk '{print $1}'
+```
+
+On Windows, use:
+
+```powershell
+ipconfig
+```
 
 ## How to Play
 
